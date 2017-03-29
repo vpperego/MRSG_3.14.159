@@ -52,9 +52,9 @@ int MRSG_main (const char* plat, const char* depl, const char* conf)
 {
     int argc = 8;
     char* argv[] = {
-	"mra",
-	"--cfg=tracing:1",
-	"--cfg=tracing/buffer:1",
+	"mrsg",
+	"--cfg=tracing:no",
+	"--cfg=tracing/buffer:no",
 	"--cfg=tracing/filename:tracefile.trace",
 	"--cfg=tracing/categorized:1",
 	"--cfg=tracing/uncategorized:1",
@@ -71,7 +71,7 @@ int MRSG_main (const char* plat, const char* depl, const char* conf)
     MSG_init (&argc, argv);
     res_mrsg = run_mrsg_simulation (plat, depl, conf);
 
-    if (res_mrsg == MSG_OK) 
+    if (res_mrsg == MSG_OK)
 	return 0;
     else
 	return 1;
@@ -139,7 +139,7 @@ static void read_mrsg_config_file (const char* file_name)
     FILE*   file;
 
     /* Set the default configuration. */
-   /* 
+   /*
     config_mrsg.mrsg_chunk_size = 67108864;
     config_mrsg.mrsg_chunk_count = 0;
     config_mrsg.mrsg_chunk_replicas = 3;
@@ -147,7 +147,7 @@ static void read_mrsg_config_file (const char* file_name)
     config_mrsg.amount_of_tasks_mrsg[MRSG_REDUCE] = 1;
     config_mrsg.mrsg_slots[MRSG_REDUCE] = 2;
     config_mrsg.mrsg_perc = 100.0; */
-    
+
 
     /* Read the user configuration file. */
 
@@ -212,9 +212,9 @@ static void read_mrsg_config_file (const char* file_name)
     xbt_assert (config_mrsg.amount_of_tasks_mrsg[MRSG_REDUCE] >= 0, "The number of reduce tasks can't be negative");
     xbt_assert (config_mrsg.mrsg_slots[MRSG_REDUCE] > 0, "Reduce slots must be greater than zero");
     xbt_assert (config_mrsg.mrsg_perc > 0, "Intermediate percent must be greater than zero");
-    
 
-    
+
+
 }
 
 /**
@@ -346,4 +346,3 @@ static void free_mrsg_global_mem (void)
 	xbt_free_ref (&job_mrsg.task_list[MRSG_REDUCE][i]);
     xbt_free_ref (&job_mrsg.task_list[MRSG_REDUCE]);
 }
-
