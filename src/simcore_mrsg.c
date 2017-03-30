@@ -50,17 +50,6 @@ static void free_mrsg_global_mem (void);
 
 int MRSG_main (const char* plat, const char* depl, const char* conf)
 {
-    int argc = 8;
-    char* argv[] = {
-	"mrsg",
-	"--cfg=tracing:no",
-	"--cfg=tracing/buffer:no",
-	"--cfg=tracing/filename:tracefile.trace",
-	"--cfg=tracing/categorized:1",
-	"--cfg=tracing/uncategorized:1",
-	"--cfg=viva/categorized:cat.plist",
-	"--cfg=viva/uncategorized:uncat.plist"
-    };
 
     msg_error_t  res_mrsg = MSG_OK;
 
@@ -68,7 +57,6 @@ int MRSG_main (const char* plat, const char* depl, const char* conf)
 
     check_config_mrsg ();
 
-    MSG_init (&argc, argv);
     res_mrsg = run_mrsg_simulation (plat, depl, conf);
 
     if (res_mrsg == MSG_OK)
@@ -100,8 +88,8 @@ static msg_error_t run_mrsg_simulation (const char* platform_file, const char* d
     MSG_create_environment (platform_file);
 
     // for tracing purposes..
-    TRACE_category_with_color ("MRSG_MAP", "1 0 0");
-    TRACE_category_with_color ("MRSG_REDUCE", "0 0 1");
+  //  TRACE_category_with_color ("MRSG_MAP", "1 0 0");
+  //  TRACE_category_with_color ("MRSG_REDUCE", "0 0 1");
 
     MSG_function_register ("master_mrsg", master_mrsg);
     MSG_function_register ("worker_mrsg", worker_mrsg);

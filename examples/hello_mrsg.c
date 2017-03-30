@@ -26,12 +26,12 @@ static void read_mrsg_config_file (const char* file_name)
     char    property[256];
     FILE*   file;
 
-    /*Set the default configuration. 
+    /*Set the default configuration.
     config_mrsg.mrsg_chunk_size = 67108864;
     config_mrsg.amount_of_tasks_mrsg[MRSG_REDUCE] = 1;
     config_mrsg.mrsg_slots[MRSG_REDUCE] = 2;
     config_mrsg.mrsg_perc = 100; */
-    
+
 
     /* Read the user configuration file. */
 
@@ -86,7 +86,7 @@ static void read_mrsg_config_file (const char* file_name)
 
 
 
- 
+
 //config_mrsg.cpu_required_map_mrsg *= config_mrsg.mrsg_chunk_size;
 //config_mrsg.cpu_required_reduce_mrsg *= (config.map_out_size / config.number_of_reduces);
 
@@ -104,9 +104,9 @@ int mrsg_map_output_function (size_t mid, size_t rid)
 int mrsg_int_data;
 
     mrsg_int_data = ((config_mrsg.mrsg_chunk_size*config_mrsg.mrsg_perc/100)/config_mrsg.amount_of_tasks_mrsg[MRSG_REDUCE]);
-    
-	 // printf ("Map task %zu Reduce task %zu Tamanho %u", mid, rid, mrsg_int_data); 
-	  
+
+	 // printf ("Map task %zu Reduce task %zu Tamanho %u", mid, rid, mrsg_int_data);
+
 		return mrsg_int_data;
 }
 
@@ -124,7 +124,7 @@ double mrsg_task_cost_function (enum mrsg_phase_e mrsg_phase, size_t tid, size_t
 {
    double mrsg_map_required;
    double mrsg_reduce_required;
-       
+
     switch (mrsg_phase)
     {
 	case MRSG_MAP:
@@ -143,6 +143,8 @@ double mrsg_task_cost_function (enum mrsg_phase_e mrsg_phase, size_t tid, size_t
 int main (int argc, char* argv[])
 {
     /* MRSG_init must be called before setting the user functions. */
+    MSG_init (&argc, argv);
+
     MRSG_init ();
     /* Set the task cost function. */
     MRSG_set_task_cost_f (mrsg_task_cost_function);
@@ -151,13 +153,12 @@ int main (int argc, char* argv[])
     /* Run the simulation. */
      //MRSG_main ("mrsg-2knode.xml", "d-mrsg-2knode.xml", "mrsg-2knode.conf");
     //MRSG_main ("teste5.xml", "d-teste5.xml", "teste5.conf");
-    //MRSG_main ("sophia_g5k.xml", "d-sophia_g5k.xml", "mrsg16-sophia-9g.conf"); 
-    // MRSG_main ("reims-32.g5k.xml", "d-reims-32.g5k.xml", "mrsg32-reims.conf"); 
-    // MRSG_main ("julio.plat.xml", "d-julio.plat.xml", "julio.conf"); 
+    //MRSG_main ("sophia_g5k.xml", "d-sophia_g5k.xml", "mrsg16-sophia-9g.conf");
+    // MRSG_main ("reims-32.g5k.xml", "d-reims-32.g5k.xml", "mrsg32-reims.conf");
+    // MRSG_main ("julio.plat.xml", "d-julio.plat.xml", "julio.conf");
     //MRSG_main ("grenoble-64.g5k.xml", "d-grenoble-64.g5k.xml", "mrsg64-grenoble.conf");
     //MRSG_main ("nancy-128.g5k.xml", "d-nancy-128.g5k.xml", "mrsg128-nancy.conf");
     //MRSG_main ("mrbitdew-sophia-50.xml", "d-mrbitdew-sophia-50.xml", "mrsg50-bitdew.conf");
    MRSG_main("mrsg_32.xml","d-mrsg_32.xml","mrsg_32.conf");
     return 0;
 }
-

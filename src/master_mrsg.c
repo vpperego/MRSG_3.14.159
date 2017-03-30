@@ -54,7 +54,7 @@ int master_mrsg (int argc, char* argv[])
     XBT_INFO ("JOB BEGIN");
     XBT_INFO (" ");
 
-    TRACE_resume ();
+  //  TRACE_resume ();
 
     tasks_log = fopen ("tasks-mrsg.csv", "w");
     fprintf (tasks_log, "task_id,mrsg_phase,worker_id,time,action,shuffle_end\n");
@@ -392,8 +392,8 @@ static void send_reduce_to_mrsg_worker (msg_host_t dest)
     XBT_INFO ("reduce %zu assigned to %s %s", tid, MSG_host_get_name (dest), flags);
 
     send_mrsg_task (MRSG_REDUCE, tid, NONE, dest);
-    
-    
+
+
 }
 
 /**
@@ -487,4 +487,3 @@ static void finish_all_mrsg_task_copies (mrsg_task_info_t ti)
         }
     }
 }
-
