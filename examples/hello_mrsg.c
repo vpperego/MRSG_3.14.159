@@ -159,6 +159,7 @@ int main (int argc, char* argv[])
     //MRSG_main ("grenoble-64.g5k.xml", "d-grenoble-64.g5k.xml", "mrsg64-grenoble.conf");
     //MRSG_main ("nancy-128.g5k.xml", "d-nancy-128.g5k.xml", "mrsg128-nancy.conf");
     //MRSG_main ("mrbitdew-sophia-50.xml", "d-mrbitdew-sophia-50.xml", "mrsg50-bitdew.conf");
-   MRSG_main("mrsg_32.xml","d-mrsg_32.xml","mrsg_32.conf");
+  // MRSG_main("mrsg_32.xml","d-mrsg_32.xml","mrsg_32.conf");
+   MRSG_main("cc.xml","d-cc.xml","cc.conf");
     return 0;
 }
