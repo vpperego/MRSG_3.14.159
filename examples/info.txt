@@ -1,5 +1,0 @@
-mrsg_map_task_cost 12e9
-mrsg_reduce_task_cost 10e9
-SG_Host0:master_mrsg] MAP Time: 3390.669129s^[[00m
-^[[00m[ 3424.381054]^[[32m[MRSG_Host0:master_mrsg] REDUCE Time: 33.711925s^[[00m
-
