@@ -268,10 +268,20 @@ static void init_job_mrsg (void)
 
     job_mrsg.finished = 0;
     job_mrsg.mrsg_heartbeats = xbt_new (struct mrsg_heartbeat_s, config_mrsg.mrsg_number_of_workers);
+
+    //Workrs PID info
+        mrsg_task_pid.listen = xbt_new(int,config_mrsg.mrsg_number_of_workers);
+        mrsg_task_pid.data_node = xbt_new(int,config_mrsg.mrsg_number_of_workers);
+        mrsg_task_pid.worker = xbt_new(int,config_mrsg.mrsg_number_of_workers);
+        mrsg_task_pid.workers_on = config_mrsg.mrsg_number_of_workers;
+        mrsg_task_pid.status = xbt_new(int,config_mrsg.mrsg_number_of_workers);
+
     for (mrsg_wid = 0; mrsg_wid < config_mrsg.mrsg_number_of_workers; mrsg_wid++)
     {
-	job_mrsg.mrsg_heartbeats[mrsg_wid].slots_av[MRSG_MAP] = config_mrsg.mrsg_slots[MRSG_MAP];
-	job_mrsg.mrsg_heartbeats[mrsg_wid].slots_av[MRSG_REDUCE] = config_mrsg.mrsg_slots[MRSG_REDUCE];
+    	job_mrsg.mrsg_heartbeats[mrsg_wid].slots_av[MRSG_MAP] = config_mrsg.mrsg_slots[MRSG_MAP];
+    	job_mrsg.mrsg_heartbeats[mrsg_wid].slots_av[MRSG_REDUCE] = config_mrsg.mrsg_slots[MRSG_REDUCE];
+      mrsg_task_pid.status[mrsg_wid] = ON;
+
     }
 
     /* Initialize map information. */
@@ -333,4 +343,9 @@ static void free_mrsg_global_mem (void)
     for (i = 0; i < config_mrsg.amount_of_tasks_mrsg[MRSG_REDUCE]; i++)
 	xbt_free_ref (&job_mrsg.task_list[MRSG_REDUCE][i]);
     xbt_free_ref (&job_mrsg.task_list[MRSG_REDUCE]);
+
+    xbt_free_ref(&mrsg_task_pid.worker);
+    xbt_free_ref(&mrsg_task_pid.data_node);
+    xbt_free_ref(&mrsg_task_pid.listen);
+    xbt_free_ref(&mrsg_task_pid.status);
 }

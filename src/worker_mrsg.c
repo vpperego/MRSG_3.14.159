@@ -30,6 +30,7 @@ static int compute_mrsg (int argc, char* argv[]);
 static void update_mrsg_map_output (msg_host_t worker_mrsg, size_t mid);
 static void get_mrsg_chunk (mrsg_task_info_t ti);
 static void get_mrsg_map_output (mrsg_task_info_t ti);
+void mrsg_kill_last_workers();
 
 size_t get_mrsg_worker_id (msg_host_t worker_mrsg)
 {
@@ -52,6 +53,8 @@ int worker_mrsg (int argc, char* argv[])
 
     me = MSG_host_self ();
 
+    mrsg_task_pid.worker[get_mrsg_worker_id (me)+1] = MSG_process_self_PID();
+
     /* Spawn a process that listens for tasks. */
     MSG_process_create ("listen_mrsg", listen_mrsg, NULL, me);
     /* Spawn a process to exchange data with other workers. */
@@ -64,7 +67,33 @@ int worker_mrsg (int argc, char* argv[])
     sprintf (mailbox, TASKTRACKER_MRSG_MAILBOX, get_mrsg_worker_id (me));
     send_mrsg_sms (SMS_FINISH_MRSG, mailbox);
 
+    mrsg_kill_last_workers();
+
+  mrsg_task_pid.workers_on--;
+  mrsg_task_pid.worker[get_mrsg_worker_id (me)+1] = -1;
+  mrsg_task_pid.status[get_mrsg_worker_id (me)+1] = OFF;
     return 0;
+}
+
+void mrsg_kill_last_workers()
+{
+  msg_process_t process_to_kill;
+  for (size_t wid = 1; wid < config_mrsg.mrsg_number_of_workers+1; wid++) {
+    if(mrsg_task_pid.status[wid]==ON && wid!=(get_mrsg_worker_id (MSG_host_self())+1))
+    {
+         process_to_kill = MSG_process_from_PID(mrsg_task_pid.worker[wid]);
+        if(process_to_kill!=NULL)
+          MSG_process_kill(process_to_kill);
+
+        process_to_kill = MSG_process_from_PID(mrsg_task_pid.listen[wid]);
+        if(process_to_kill!=NULL)
+          MSG_process_kill(process_to_kill);
+
+        process_to_kill = MSG_process_from_PID(mrsg_task_pid.data_node[wid]);
+        if(process_to_kill!=NULL)
+          MSG_process_kill(process_to_kill);
+    }
+      }
 }
 
 /**
@@ -90,6 +119,8 @@ static int listen_mrsg (int argc, char* argv[])
     msg_task_t   msg = NULL;
 
     me = MSG_host_self ();
+    size_t wid = get_mrsg_worker_id(me) + 1;
+    mrsg_task_pid.listen[wid] = MSG_process_self_PID ();
     sprintf (mailbox, TASKTRACKER_MRSG_MAILBOX, get_mrsg_worker_id (me));
 
     while (!job_mrsg.finished)
@@ -124,11 +155,11 @@ static int compute_mrsg (int argc, char* argv[])
     mrsg_task = (msg_task_t) MSG_process_get_data (MSG_process_self ());
     ti = (mrsg_task_info_t) MSG_task_get_data (mrsg_task);
     ti->mrsg_pid = MSG_process_self_PID ();
-    
-    
+
+
     //XBT_INFO (" Host %zd Recebeu  %d dados-MAP \n", ti->mrsg_wid, ti->mrsg_size_data_proc);
-  
-    
+
+
     switch (ti->mrsg_phase)
     {
 	case MRSG_MAP:
@@ -163,10 +194,10 @@ static int compute_mrsg (int argc, char* argv[])
     }
 
     job_mrsg.mrsg_heartbeats[ti->mrsg_wid].slots_av[ti->mrsg_phase]++;
-    
+
     if (!job_mrsg.finished)
 	send (SMS_TASK_MRSG_DONE, 0.0, 0.0, ti, MASTER_MRSG_MAILBOX);
-    
+
     return 0;
 }
 
@@ -279,4 +310,3 @@ static void get_mrsg_map_output (mrsg_task_info_t ti)
 
     xbt_free_ref (&data_copied);
 }
-

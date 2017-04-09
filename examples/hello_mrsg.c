@@ -143,7 +143,8 @@ double mrsg_task_cost_function (enum mrsg_phase_e mrsg_phase, size_t tid, size_t
 int main (int argc, char* argv[])
 {
     /* MRSG_init must be called before setting the user functions. */
-    MSG_init (&argc, argv);
+   int sg_argc = argc -3; 
+   MSG_init (&sg_argc, argv);
 
     MRSG_init ();
     /* Set the task cost function. */
@@ -160,6 +161,6 @@ int main (int argc, char* argv[])
     //MRSG_main ("nancy-128.g5k.xml", "d-nancy-128.g5k.xml", "mrsg128-nancy.conf");
     //MRSG_main ("mrbitdew-sophia-50.xml", "d-mrbitdew-sophia-50.xml", "mrsg50-bitdew.conf");
   // MRSG_main("mrsg_32.xml","d-mrsg_32.xml","mrsg_32.conf");
-   MRSG_main("cc.xml","d-cc.xml","cc.conf");
+   MRSG_main(argv[argc-3],argv[argc-2],argv[argc-1]);
     return 0;
 }

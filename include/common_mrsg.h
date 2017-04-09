@@ -40,6 +40,9 @@ along with MRSG.  If not, see <http://www.gnu.org/licenses/>. */
 #define NONE (-1)
 #define MAX_SPECULATIVE_COPIES 3
 
+#define ON 1
+#define OFF -1
+
 /* Mailbox related. */
 #define MAILBOX_ALIAS_SIZE 256
 #define MASTER_MRSG_MAILBOX "MASTER"
@@ -107,6 +110,16 @@ struct mrsg_task_info_s {
 
 typedef struct mrsg_task_info_s* mrsg_task_info_t;
 
+typedef struct {
+  int * listen;
+  int * data_node;
+  int * worker;
+  int workers_on;
+  int * status;
+}task_pid;
+
+task_pid mrsg_task_pid;
+
 struct mrsg_stats_s {
     int   map_local_mrsg;
     int   map_remote_mrsg;
@@ -125,7 +138,7 @@ struct mrsg_user_s {
 } user_mrsg;
 
 
-/** 
+/**
  * @brief  Send a message/task.
  * @param  str      The message.
  * @param  cpu      The amount of cpu required by the task.
@@ -136,7 +149,7 @@ struct mrsg_user_s {
  */
 msg_error_t send (const char* str, double cpu, double net, void* data, const char* mailbox);
 
-/** 
+/**
  * @brief  Send a short message, of size zero.
  * @param  str      The message.
  * @param  mailbox  The destination mailbox alias.
@@ -144,7 +157,7 @@ msg_error_t send (const char* str, double cpu, double net, void* data, const cha
  */
 msg_error_t send_mrsg_sms (const char* str, const char* mailbox);
 
-/** 
+/**
  * @brief  Receive a message/task from a mailbox.
  * @param  msg      Where to store the received message.
  * @param  mailbox  The mailbox alias.
@@ -152,7 +165,7 @@ msg_error_t send_mrsg_sms (const char* str, const char* mailbox);
  */
 msg_error_t receive (msg_task_t* msg, const char* mailbox);
 
-/** 
+/**
  * @brief  Compare the message from a task with a string.
  * @param  msg  The message/task.
  * @param  str  The string to compare with.

@@ -5,11 +5,12 @@ cd ..
 make clean all
 cd examples/
 make clean all
-./hello_mrsg.bin --cfg=tracing:no  2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida.txt &
-#./hello_mrsg.bin --cfg=tracing:no  cc.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida.txt &
-#./hello_mrsg.bin --cfg=tracing:no  cc2.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida2.txt &
-#./hello_mrsg.bin --cfg=tracing:no  cc3.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida3.txt &
-#./hello_mrsg.bin --cfg=tracing:no  cc4.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida4.txt &
-#./hello_mrsg.bin --cfg=tracing:no  cc5.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida5.txt &
-#./hello_mrsg.bin --cfg=tracing:no  cc6.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida6.txt &
-#./hello_mrsg.bin --cfg=tracing:no  cc7.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida7.txt &
+#python create-mrsg-plat.py yh.xml 2000 2 5e9 1e-4 1.25e8
+#python create-mrsg-plat.py fb.xml 3000 2 5e9 1e-4 1.25e8
+#python create-mrsg-depoly.py yh.xml
+#python create-mrsg-depoly.py fb.xml
+#./hello_mrsg.bin --cfg=tracing:no  2>&1| $HOME/simgrid-3.14.159/bin/colorize > saida.txt &
+./hello_mrsg.bin --cfg=tracing:no  cc.xml d-cc.xml cc.conf 2>&1| $HOME/simgrid-3.14.159/bin/simgrid-colorizer  > cc.txt &
+#./hello_mrsg.bin --cfg=tracing:no  yh.xml d-yh.xml yh_206.conf 2>&1| $HOME/simgrid-3.14.159/bin/colorize > yh_206.txt &
+#./hello_mrsg.bin --cfg=tracing:no  yh.xml d-yh.xml yh_268.conf  2>&1| $HOME/simgrid-3.14.159/bin/colorize > yh_268.txt &
+#./hello_mrsg.bin --cfg=tracing:no  fb.xml d-fb.xml fb.conf  2>&1| $HOME/simgrid-3.14.159/bin/colorize > fb.txt &

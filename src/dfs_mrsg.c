@@ -62,7 +62,7 @@ void default_mrsg_dfs_f (char** dfs_matrix, size_t chunks, size_t workers_mrsg, 
 	{
 	    for (r = 0; r < config_mrsg.mrsg_chunk_replicas; r++)
 	    {
-		owner = ((chunk % config_mrsg.mrsg_number_of_workers) 
+		owner = ((chunk % config_mrsg.mrsg_number_of_workers)
 			+ ((config_mrsg.mrsg_number_of_workers / config_mrsg.mrsg_chunk_replicas) * r)
 			) % config_mrsg.mrsg_number_of_workers;
 
@@ -105,6 +105,9 @@ int data_node_mrsg (int argc, char* argv[])
     msg_task_t   msg = NULL;
 
     sprintf (mailbox, DATANODE_MRSG_MAILBOX, get_mrsg_worker_id (MSG_host_self ()));
+
+    size_t wid =get_mrsg_worker_id (MSG_host_self ())+1 ;
+    mrsg_task_pid.data_node[wid] = MSG_process_self_PID ();
 
     while (!job_mrsg.finished)
     {
@@ -153,4 +156,3 @@ static void send_mrsg_data (msg_task_t msg)
 
     MSG_task_destroy (msg);
 }
-
