@@ -43,31 +43,48 @@ output.write('  <AS id="AS1" routing="Full">\n')
 
 random.seed()
 
+#Storage definition
+diskSize = "500GB" #sys.argv[7]
+bWrite = "60MBps" #sys.argv[8]
+bRead = "200MBps" #sys.argv[9]
+bConnection = "220MBps" #sys.argv[10]
+output.write('\t<storage_type id="single_HDD" model="linear_no_lat" size="'+str(diskSize)+'" content_type="txt_unix">\n')
+output.write('\t\t<model_prop id="Bwrite" value="'+str(bWrite)+'" />\n')
+output.write('\t\t<model_prop id="Bread" value="'+str(bRead)+'" />\n')
+output.write('\t\t<model_prop id="Bconnection" value="'+str(bConnection)+'" />\n')
+output.write('\t</storage_type>\n')
 
-
+for i in range(numNodes):
+	output.write('\t<storage id="Disk'+ str(i) +'" typeId="single_HDD"' +
+	' content_type="txt_unix" attach="MRSG_Host'+str(i)+'"/>\n')
 # Nodes definition.
 output.write('\n')
 if len(cpu) == 1 and len(numCores) == 1:
 	for i in range(numNodes):
-		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(cpu[0]) + 'f" core="' + str(numCores[0]) + '" />\n')
+		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(cpu[0]) + 'f" core="' + str(numCores[0]) + '">\n')
+ 		if i==0:
+			for j in range(numNodes):
+				output.write('\t\t<mount storageId="Disk'+str(j)+'" name="/home"/>\n')
+		else:
+			output.write('\t\t<mount storageId="Disk'+str(i)+'" name="/home"/>\n')
+		output.write('\t</host>\n')
 
- 
 elif len(numCores) == 1:
 	for i in range(numNodes):
 		rCPU = random.uniform(cpu[0], cpu[1])
-		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(rCPU) + 'f" core="' + str(numCores[0]) + '" />\n')	
+		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(rCPU) + 'f" core="' + str(numCores[0]) + '" />\n')
 
 elif len(cpu) == 1:
 	for i in range(numNodes):
 		rCor = random.randrange(numCores[0], numCores[1],2)
-		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(cpu[0]) + 'f" core="' + str(rCor) + '" />\n')	
+		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(cpu[0]) + 'f" core="' + str(rCor) + '" />\n')
 
 
 else:
 	for i in range(numNodes):
 		rCPU = random.uniform(cpu[0], cpu[1])
 		rCor = random.randrange(numCores[0], numCores[1], 2)
-		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(rCPU) + 'f" core="' + str(rCor) + '" />\n')	
+		output.write('\t<host id="MRSG_Host' + str(i) + '" speed="' + str(rCPU) + 'f" core="' + str(rCor) + '" />\n')
 
 
 
@@ -82,7 +99,7 @@ elif len(latency) ==1:
 	for i in range(1,numNodes):
 		rBW = random.uniform (bandwidth[0], bandwidth[1])
 		output.write('\t<link id="l' + str(i) + '" bandwidth="' + str(rBW) + 'Bps" latency="' + str(latency[0]) + 's" />\n')
-		
+
 
 elif (len(bandwidth) == 1 and len(latency) ==1):
 	for i in range(1,numNodes):
