@@ -99,7 +99,7 @@ static msg_error_t run_mrsg_simulation (const char* platform_file, const char* d
 
     res_mrsg = MSG_main ();
 
-    free_mrsg_global_mem ();
+    //free_mrsg_global_mem ();
 
     return res_mrsg;
 }
