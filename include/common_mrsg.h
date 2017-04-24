@@ -22,6 +22,7 @@ along with MRSG.  If not, see <http://www.gnu.org/licenses/>. */
 #include <xbt/sysdep.h>
 #include <xbt/log.h>
 #include <xbt/asserts.h>
+#include <xbt/RngStream.h>
 #include "mrsg.h"
 
 
@@ -39,6 +40,9 @@ along with MRSG.  If not, see <http://www.gnu.org/licenses/>. */
 
 #define NONE (-1)
 #define MAX_SPECULATIVE_COPIES 3
+
+/* IO contention parameters */
+#define MRSG_IO_CONTENTION_COEF 0.15
 
 #define ON 1
 #define OFF -1
@@ -83,6 +87,7 @@ struct mrsg_config_s {
     double         reduce_task_cost_mrsg;
     int            initialized;
     msg_host_t*    workers_mrsg;
+    RngStream     mrsg_IO_contention_stream; 
 } config_mrsg;
 
 struct mrsg_job_s {

@@ -19,6 +19,7 @@ along with MRSG.  If not, see <http://www.gnu.org/licenses/>. */
 #include <xbt/sysdep.h>
 #include <xbt/log.h>
 #include <xbt/asserts.h>
+#include <xbt/RngStream.h>
 #include "common_mrsg.h"
 #include "worker_mrsg.h"
 #include "dfs_mrsg.h"
@@ -254,6 +255,11 @@ static void init_mrsg_config (void)
     config_mrsg.mrsg_heartbeat_interval = mrsg_maxval (MRSG_HEARTBEAT_MIN_INTERVAL, config_mrsg.mrsg_number_of_workers / 100);
     config_mrsg.amount_of_tasks_mrsg[MRSG_MAP] = config_mrsg.mrsg_chunk_count;
     config_mrsg.initialized = 1;
+
+    /* Initialize Rng_stream used to simulate I/O contention */
+    unsigned long int contention_seed[] = {102, 33, 27, 86, 1, 392};
+    config_mrsg.mrsg_IO_contention_stream = RngStream_CreateStream(NULL);
+    RngStream_SetSeed(config_mrsg.mrsg_IO_contention_stream, contention_seed);
 }
 
 /**
@@ -348,4 +354,5 @@ static void free_mrsg_global_mem (void)
     xbt_free_ref(&mrsg_task_pid.data_node);
     xbt_free_ref(&mrsg_task_pid.listen);
     xbt_free_ref(&mrsg_task_pid.status);
+    RngStream_DeleteStream(&(config_mrsg.mrsg_IO_contention_stream));
 }
